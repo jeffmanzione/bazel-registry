@@ -1,0 +1,21 @@
+{
+  "name": "jeffmanzione_bazel-registry",
+  "version": "1.0.0",
+  "description": "Bazel registry for staging my projects",
+  "scripts": {
+    "serve": "npx http-server --proxy http://localhost:8080?"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffmanzione/bazel-registry.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeffmanzione/bazel-registry/issues"
+  },
+  "homepage": "https://github.com/jeffmanzione/bazel-registry#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

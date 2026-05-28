@@ -1,0 +1,5 @@
+# Downloaded archives.
+jeffmanzione_*.tar.gz
+
+# Node
+node_modules/
