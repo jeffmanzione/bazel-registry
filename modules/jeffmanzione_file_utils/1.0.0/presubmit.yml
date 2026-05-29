@@ -13,7 +13,7 @@ tasks:
     platform: ${{ platform }}
     bazel: ${{ bazel }}
     build_targets:
-      - "@jeffmanzione_file-utils//..."
+      - "@jeffmanzione_file_utils//..."
     test_targets:
-      - "@jeffmanzione_file-utils//..."
+      - "@jeffmanzione_file_utils//..."
 
