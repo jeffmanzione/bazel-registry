@@ -3,3 +3,7 @@ jeffmanzione_*.tar.gz
 
 # Node
 node_modules/
+
+# Bazel
+bazel*
+MODULE.bazel.lock
