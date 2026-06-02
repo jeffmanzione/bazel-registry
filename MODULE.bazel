@@ -1,4 +1,4 @@
 module(
-    name = "jeffmanzione_bazel-registry",
+    name = "jeffmanzione_bazel_registry",
     version = "0.0.0",
 )
