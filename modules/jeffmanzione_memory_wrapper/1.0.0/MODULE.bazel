@@ -1,6 +1,6 @@
 module(
     name = "jeffmanzione_memory_wrapper",
-    version = "0.0.0",
+    version = "1.0.0",
     compatibility_level = 1,
 )
 
