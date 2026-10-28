@@ -1,0 +1,14 @@
+{
+  "homepage": "https://github.com/jeffmanzione/language-tools",
+  "maintainers": [
+    {
+      "email": "jeffreymanzione@gmail.com",
+      "github": "jeffmanzione",
+      "name": "Jeff Manzione",
+      "github_user_id": 4648705
+    }
+  ],
+  "repository": ["github:jeffmanzione/language-tools"],
+  "versions": ["1.0.0", "1.0.1", "1.0.2"],
+  "yanked_versions": {}
+}
