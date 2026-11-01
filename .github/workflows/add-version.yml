@@ -1,0 +1,60 @@
+# Adds a module version from its release archive and opens a PR for it.
+#
+# The modules' release workflows start this. To run it by hand:
+#   gh workflow run add-version.yml -R jeffmanzione/bazel-registry \
+#     -f archive_url=https://github.com/jeffmanzione/<repo>/releases/download/v<version>/<module>-<version>.tar.gz
+name: Add module version
+
+on:
+  workflow_dispatch:
+    inputs:
+      archive_url:
+        description: URL of the release archive, <module>-<version>.tar.gz
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  add-version:
+    runs-on: ubuntu-latest
+    env:
+      ARCHIVE_URL: ${{ inputs.archive_url }}
+      USE_BAZEL_VERSION: 8.4.2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add version
+        run: |
+          ./create_module_version.sh "$ARCHIVE_URL"
+          PREFIX=$(basename "$ARCHIVE_URL" .tar.gz)
+          MODULE=$(echo "$PREFIX" | sed -E 's/-[0-9]+\.[0-9]+\.[0-9]+$//')
+          echo "MODULE=$MODULE" >> "$GITHUB_ENV"
+          echo "VERSION=${PREFIX#$MODULE-}" >> "$GITHUB_ENV"
+
+      # Resolves the module's dependencies and fetches it, which checks the
+      # URL, integrity and strip_prefix.
+      - name: Verify
+        run: |
+          mkdir "$RUNNER_TEMP/verify"
+          cd "$RUNNER_TEMP/verify"
+          echo "bazel_dep(name = \"$MODULE\", version = \"$VERSION\")" > MODULE.bazel
+          REGISTRIES="--registry=file://$GITHUB_WORKSPACE --registry=https://bcr.bazel.build"
+          bazel mod graph $REGISTRIES
+          bazel fetch $REGISTRIES --repo="@$MODULE"
+
+      - name: Open PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="add/$MODULE-$VERSION"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add "modules/$MODULE"
+          git commit -m "Add $MODULE-$VERSION"
+          git push origin "$BRANCH"
+          gh pr create --base main --head "$BRANCH" \
+            --title "Add $MODULE $VERSION" \
+            --body "Adds \`$MODULE\` $VERSION from $ARCHIVE_URL, which Bazel resolves and fetches with this registry."
